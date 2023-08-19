@@ -6,7 +6,7 @@ import './NavbarTop.css';
 
 export default function NavbarTop() {
   return (
-    <Navbar expand="sm" className="navbar-box-shadow mb-3">
+    <Navbar expand="sm" className="navbar-box-shadow mb-5">
       <Container fluid className="px-4">
         <Navbar.Brand href="#" className=" custom-navbar-brand">
           BOOK STORE

@@ -1,0 +1,11 @@
+.card-button-wrapper {
+  position: absolute;
+  bottom: 10px; /* Adjust the vertical position as needed */
+  left: 10px; /* Adjust the horizontal position as needed */
+  display: flex;
+  gap: 5px;
+}
+
+.card-button {
+  width: 50px; /* Adjust the width as needed */
+}
