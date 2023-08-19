@@ -6,7 +6,7 @@ import './NavbarTop.css';
 
 export default function NavbarTop() {
   return (
-    <Navbar expand="sm" className="bg-body-secondary">
+    <Navbar expand="sm" className="navbar-box-shadow mb-3">
       <Container fluid className="px-4">
         <Navbar.Brand href="#" className=" custom-navbar-brand">
           BOOK STORE
@@ -20,7 +20,7 @@ export default function NavbarTop() {
               className="custom-search-field me-2"
               aria-label="Search"
             />
-            <Button variant="outline-dark">Search</Button>
+            <Button variant="outline-secondary">Search</Button>
           </Form>
         </Navbar.Collapse>
       </Container>
