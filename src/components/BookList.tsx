@@ -83,13 +83,26 @@ const BookList = () => {
   // Function to save changes made in the modal
   const handleSaveChanges = async () => {
     if (selectedBook) {
+      let updatedCovers = selectedBook.covers; // Start with existing covers
+      if (selectedBook.isbn !== bookIsbn && bookIsbn) {
+        // ISBN has changed and is not empty. Fetch new covers.
+        updatedCovers = {
+          S: `https://covers.openlibrary.org/b/isbn/${bookIsbn}-S.jpg`,
+          M: `https://covers.openlibrary.org/b/isbn/${bookIsbn}-M.jpg`,
+          L: `https://covers.openlibrary.org/b/isbn/${bookIsbn}-L.jpg`
+        };
+      }
+
       const updatedBook: Book = {
         ...selectedBook,
         title: editedTitle,
         author_name: editedAuthor,
         first_publish_year: selectedFirstPublishYear,
         number_of_pages_median: selectedNumberOfPages,
+        covers: updatedCovers,
+        isbn: bookIsbn // Store the updated ISBN
       };
+
       // Replace with your API call to update the book
       await updateBook(selectedBook.id, updatedBook);
 
@@ -130,7 +143,7 @@ const BookList = () => {
   return (
     <Container>
       <h4
-        className="text-secondary mb-4"
+        className="mb-4 add-book-custom"
         onClick={() => {
           setNewBook({
             title: '',
@@ -141,7 +154,6 @@ const BookList = () => {
           });
           setShowModal(true);
         }}
-        style={{ cursor: 'pointer' }}
       >
         <FontAwesomeIcon icon={faBook} /> Add book
       </h4>

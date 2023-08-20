@@ -9,3 +9,11 @@
 .card-button {
   width: 50px; /* Adjust the width as needed */
 }
+
+.add-book-custom {
+  color: #6c757d;
+}
+.add-book-custom:hover {
+  cursor: pointer;
+  color: #000000;
+}
