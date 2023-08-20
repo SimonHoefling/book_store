@@ -6,6 +6,8 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBook } from '@fortawesome/free-solid-svg-icons'
 import './BookList.css';
 
 // Define the Book interface
@@ -87,6 +89,7 @@ const BookList = () => {
 
   return (
     <Container>
+      <h4 className='text-secondary mb-4'><FontAwesomeIcon icon={faBook} /> Add book</h4>
       {/* Display the list of books */}
       <div className="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-4 mb-5">
         {books.map((book) => (
