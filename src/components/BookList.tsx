@@ -1,6 +1,6 @@
 // src/components/BookList.tsx
 import React, { useEffect, useState } from 'react';
-import { fetchBooks, updateBook, deleteBook, createBook } from '../services/api'; // Update import to include createBook
+import { fetchBooks, updateBook, deleteBook, createBook } from '../services/api';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
@@ -10,7 +10,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBook } from '@fortawesome/free-solid-svg-icons';
 import './BookList.css';
 
-// Define the Book interface
 interface Book {
   id: string;
   title: string;
@@ -22,6 +21,8 @@ interface Book {
     M: string;
     L: string;
   };
+  isbn: string;
+  isNew?: boolean;
 }
 
 const BookList = () => {
@@ -35,11 +36,14 @@ const BookList = () => {
   const [selectedFirstPublishYear, setSelectedFirstPublishYear] = useState<number>(0);
   const [selectedNumberOfPages, setSelectedNumberOfPages] = useState<number>(0);
   const [bookToDelete, setBookToDelete] = useState<Book | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [bookIsbn, setBookIsbn] = useState('');
   const [newBook, setNewBook] = useState({
     title: '',
     author_name: '',
     first_publish_year: 0,
     number_of_pages_median: 0,
+    isbn: '', // Add an 'isbn' property for the ISBN number
   });
 
   // Load books from API on sorted by title
@@ -54,16 +58,24 @@ const BookList = () => {
 
   // Function to handle editing a book
   const handleEdit = (book: Book) => {
+    setIsEditing(true);
     setSelectedBook(book);
     setEditedTitle(book.title);
     setEditedAuthor(book.author_name);
     setSelectedFirstPublishYear(book.first_publish_year);
     setSelectedNumberOfPages(book.number_of_pages_median);
+    if (book.isNew) {
+      setBookIsbn(book.isbn);
+    } else {
+      setBookIsbn(''); // Reset the ISBN input field for existing books
+    }
     setShowModal(true);
   };
 
+
   // Function to close the editing modal
   const handleCloseModal = () => {
+    setIsEditing(false);
     setSelectedBook(null);
     setShowModal(false);
   };
@@ -94,8 +106,19 @@ const BookList = () => {
 
   // Function to add a new book
   const handleAddBook = async () => {
+    // Modify the newBook object before creating the book
+    const bookToAdd = {
+      ...newBook,
+      covers: newBook.isbn ? {
+        S: `https://covers.openlibrary.org/b/isbn/${newBook.isbn}-M.jpg`,
+        M: `https://covers.openlibrary.org/b/isbn/${newBook.isbn}-M.jpg`,
+        L: `https://covers.openlibrary.org/b/isbn/${newBook.isbn}-L.jpg`,
+      } : {}, // Empty object if no ISBN
+      isNew: true,
+    };
+
     // Replace with your API call to create a new book
-    const response = await createBook(newBook);
+    const response = await createBook(bookToAdd);
 
     // Update the books list with the new book
     setBooks([...books, response.data]);
@@ -109,14 +132,13 @@ const BookList = () => {
       <h4
         className="text-secondary mb-4"
         onClick={() => {
-          // Clear previous new book data (is needed when adding a new )
           setNewBook({
             title: '',
             author_name: '',
             first_publish_year: 0,
             number_of_pages_median: 0,
+            isbn: '', // Clear previous new book data
           });
-          // Open the modal for adding a new book
           setShowModal(true);
         }}
         style={{ cursor: 'pointer' }}
@@ -238,6 +260,20 @@ const BookList = () => {
                         ...newBook,
                         number_of_pages_median: parseInt(e.target.value),
                       })
+                }
+              />
+            </Form.Group>
+            {/* Add a field for ISBN number */}
+            <Form.Group controlId="formIsbn">
+              <Form.Label>ISBN</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter ISBN"
+                value={isEditing ? bookIsbn : newBook.isbn}
+                onChange={(e) =>
+                  isEditing
+                    ? setBookIsbn(e.target.value) // Update the ISBN for the current book being edited
+                    : setNewBook({ ...newBook, isbn: e.target.value })
                 }
               />
             </Form.Group>
