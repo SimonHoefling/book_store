@@ -1,7 +1,6 @@
 // src/components/BookList.tsx
-// src/components/BookList.tsx
 import React, { useEffect, useState } from 'react';
-import { fetchBooks, updateBook } from '../services/api'; // Replace with your actual API functions
+import { fetchBooks, updateBook, deleteBook } from '../services/api'; // Update import to include deleteBook
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
@@ -27,11 +26,13 @@ const BookList = () => {
   // State variables
   const [books, setBooks] = useState<Book[]>([]);
   const [showModal, setShowModal] = useState(false);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [editedTitle, setEditedTitle] = useState('');
   const [editedAuthor, setEditedAuthor] = useState('');
   const [selectedFirstPublishYear, setSelectedFirstPublishYear] = useState<number>(0);
   const [selectedNumberOfPages, setSelectedNumberOfPages] = useState<number>(0);
+  const [bookToDelete, setBookToDelete] = useState<Book | null>(null);
 
   // Load books from API on sorted by title
   useEffect(() => {
@@ -83,6 +84,7 @@ const BookList = () => {
     }
   };
 
+
   return (
     <Container>
       {/* Display the list of books */}
@@ -121,7 +123,14 @@ const BookList = () => {
                   >
                     EDIT
                   </Button>
-                  <Button variant="danger" size="sm">
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    onClick={() => {
+                      setBookToDelete(book);
+                      setShowDeleteConfirmation(true);
+                    }}
+                  >
                     DELETE
                   </Button>
                 </div>
@@ -178,13 +187,42 @@ const BookList = () => {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseModal}>
-            Close
+            CLOSE
           </Button>
           <Button variant="success" onClick={handleSaveChanges}>
-            Save Changes
+            SAVE CHANGES
           </Button>
         </Modal.Footer>
       </Modal>
+      {/* Delete Confirmation Modal */}
+      <Modal show={showDeleteConfirmation} onHide={() => setShowDeleteConfirmation(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Delete</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete the book: {bookToDelete?.title}?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowDeleteConfirmation(false)}>
+            CANCEL
+          </Button>
+          <Button
+            variant="danger"
+            onClick={async () => {
+              if (bookToDelete) {
+                await deleteBook(bookToDelete.id);
+                const updatedBooks = books.filter(book => book.id !== bookToDelete.id);
+                setBooks(updatedBooks);
+                setBookToDelete(null);
+                setShowDeleteConfirmation(false);
+              }
+            }}
+          >
+            DELETE
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
     </Container>
   );
 };
