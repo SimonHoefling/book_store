@@ -4,6 +4,9 @@
   color: #6c757d;
   letter-spacing: 2px;
 }
+.custom-navbar-brand:hover {
+  color: #6c757d;
+}
 .custom-search-field:focus {
   /* border-color: #000000; */
   border: none;

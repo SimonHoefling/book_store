@@ -1,14 +1,19 @@
 // src/components/BookList.tsx
-import React, { useEffect, useState } from 'react';
-import { fetchBooks, updateBook, deleteBook, createBook } from '../services/api';
-import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
-import Modal from 'react-bootstrap/Modal';
-import Form from 'react-bootstrap/Form';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBook } from '@fortawesome/free-solid-svg-icons';
-import './BookList.css';
+import React, { useEffect, useState } from "react";
+import {
+  fetchBooks,
+  updateBook,
+  deleteBook,
+  createBook,
+} from "../services/api";
+import Card from "react-bootstrap/Card";
+import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
+import Modal from "react-bootstrap/Modal";
+import Form from "react-bootstrap/Form";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBook } from "@fortawesome/free-solid-svg-icons";
+import "./BookList.css";
 
 interface Book {
   id: string;
@@ -25,25 +30,30 @@ interface Book {
   isNew?: boolean;
 }
 
-const BookList = () => {
-  // State variables
+interface BookListProps {
+  searchQuery: string;
+}
+
+// State variables
+const BookList = ({ searchQuery }: BookListProps) => {
   const [books, setBooks] = useState<Book[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
-  const [editedTitle, setEditedTitle] = useState('');
-  const [editedAuthor, setEditedAuthor] = useState('');
-  const [selectedFirstPublishYear, setSelectedFirstPublishYear] = useState<number>(0);
+  const [editedTitle, setEditedTitle] = useState("");
+  const [editedAuthor, setEditedAuthor] = useState("");
+  const [selectedFirstPublishYear, setSelectedFirstPublishYear] =
+    useState<number>(0);
   const [selectedNumberOfPages, setSelectedNumberOfPages] = useState<number>(0);
   const [bookToDelete, setBookToDelete] = useState<Book | null>(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [bookIsbn, setBookIsbn] = useState('');
+  const [bookIsbn, setBookIsbn] = useState("");
   const [newBook, setNewBook] = useState({
-    title: '',
-    author_name: '',
+    title: "",
+    author_name: "",
     first_publish_year: 0,
     number_of_pages_median: 0,
-    isbn: '', // Add an 'isbn' property for the ISBN number
+    isbn: "",
   });
 
   // Load books from API on sorted by title
@@ -67,11 +77,15 @@ const BookList = () => {
     if (book.isNew) {
       setBookIsbn(book.isbn);
     } else {
-      setBookIsbn(''); // Reset the ISBN input field for existing books
+      setBookIsbn(""); // Reset the ISBN input field for existing books
     }
     setShowModal(true);
   };
 
+  // Filter books based on search query
+  const filteredBooks = books.filter((book) =>
+    book.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   // Function to close the editing modal
   const handleCloseModal = () => {
@@ -89,7 +103,7 @@ const BookList = () => {
         updatedCovers = {
           S: `https://covers.openlibrary.org/b/isbn/${bookIsbn}-S.jpg`,
           M: `https://covers.openlibrary.org/b/isbn/${bookIsbn}-M.jpg`,
-          L: `https://covers.openlibrary.org/b/isbn/${bookIsbn}-L.jpg`
+          L: `https://covers.openlibrary.org/b/isbn/${bookIsbn}-L.jpg`,
         };
       }
 
@@ -100,7 +114,7 @@ const BookList = () => {
         first_publish_year: selectedFirstPublishYear,
         number_of_pages_median: selectedNumberOfPages,
         covers: updatedCovers,
-        isbn: bookIsbn // Store the updated ISBN
+        isbn: bookIsbn, // Store the updated ISBN
       };
 
       // Replace with your API call to update the book
@@ -122,11 +136,13 @@ const BookList = () => {
     // Modify the newBook object before creating the book
     const bookToAdd = {
       ...newBook,
-      covers: newBook.isbn ? {
-        S: `https://covers.openlibrary.org/b/isbn/${newBook.isbn}-M.jpg`,
-        M: `https://covers.openlibrary.org/b/isbn/${newBook.isbn}-M.jpg`,
-        L: `https://covers.openlibrary.org/b/isbn/${newBook.isbn}-L.jpg`,
-      } : {}, // Empty object if no ISBN
+      covers: newBook.isbn
+        ? {
+            S: `https://covers.openlibrary.org/b/isbn/${newBook.isbn}-M.jpg`,
+            M: `https://covers.openlibrary.org/b/isbn/${newBook.isbn}-M.jpg`,
+            L: `https://covers.openlibrary.org/b/isbn/${newBook.isbn}-L.jpg`,
+          }
+        : {}, // Empty object if no ISBN
       isNew: true,
     };
 
@@ -142,15 +158,16 @@ const BookList = () => {
 
   return (
     <Container>
+      {/* Add a new book */}
       <h4
         className="mb-4 add-book-custom"
         onClick={() => {
           setNewBook({
-            title: '',
-            author_name: '',
+            title: "",
+            author_name: "",
             first_publish_year: 0,
             number_of_pages_median: 0,
-            isbn: '', // Clear previous new book data
+            isbn: "", // Clear previous new book data
           });
           setShowModal(true);
         }}
@@ -158,21 +175,27 @@ const BookList = () => {
         <FontAwesomeIcon icon={faBook} /> Add book
       </h4>
       {/* Display the list of books */}
-      <div className="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-4 mb-5">
-        {books.map((book) => (
+      <div className="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 mb-5">
+        {filteredBooks.map((book) => (
           <div key={book.id} className="col mb-4">
             <Card className="h-100 shadow">
-              <div style={{
-                position: 'relative',
-                paddingBottom: '100%',
-                overflow: 'hidden'
-                }}>
+              <div
+                style={{
+                  position: "relative",
+                  paddingBottom: "100%",
+                  overflow: "hidden",
+                }}
+              >
                 {book.covers && book.covers.M ? (
                   <Card.Img
                     variant="top"
                     src={book.covers.M}
                     alt={book.title}
-                    style={{ position: 'absolute', width: '100%', height: '100%' }}
+                    style={{
+                      position: "absolute",
+                      width: "100%",
+                      height: "100%",
+                    }}
                   />
                 ) : null}
               </div>
@@ -204,11 +227,26 @@ const BookList = () => {
             </Card>
           </div>
         ))}
+        {/* Display message if no books match the search */}
+        {filteredBooks.length === 0 && (
+          <div
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: "100%",
+            }}
+            className="text-center"
+          >
+            <h3>Can't find the book with the search term "{searchQuery}"</h3>
+          </div>
+        )}
       </div>
       {/* Modal for editing or adding a book */}
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
-          <Modal.Title>{selectedBook ? 'Edit Book' : 'Add Book'}</Modal.Title>
+          <Modal.Title>{selectedBook ? "Edit Book" : "Add Book"}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {/* Form for editing or adding book details */}
@@ -245,7 +283,9 @@ const BookList = () => {
                 type="number"
                 placeholder="Enter first published year"
                 value={
-                  selectedBook ? selectedFirstPublishYear : newBook.first_publish_year
+                  selectedBook
+                    ? selectedFirstPublishYear
+                    : newBook.first_publish_year
                 }
                 onChange={(e) =>
                   selectedBook
@@ -263,7 +303,9 @@ const BookList = () => {
                 type="number"
                 placeholder="Enter number of pages median"
                 value={
-                  selectedBook ? selectedNumberOfPages : newBook.number_of_pages_median
+                  selectedBook
+                    ? selectedNumberOfPages
+                    : newBook.number_of_pages_median
                 }
                 onChange={(e) =>
                   selectedBook
@@ -296,15 +338,18 @@ const BookList = () => {
             CLOSE
           </Button>
           <Button
-            variant={selectedBook ? 'success' : 'primary'}
+            variant={selectedBook ? "success" : "primary"}
             onClick={selectedBook ? handleSaveChanges : handleAddBook}
           >
-            {selectedBook ? 'SAVE CHANGES' : 'ADD BOOK'}
+            {selectedBook ? "SAVE CHANGES" : "ADD BOOK"}
           </Button>
         </Modal.Footer>
       </Modal>
       {/* Delete Confirmation Modal */}
-      <Modal show={showDeleteConfirmation} onHide={() => setShowDeleteConfirmation(false)}>
+      <Modal
+        show={showDeleteConfirmation}
+        onHide={() => setShowDeleteConfirmation(false)}
+      >
         <Modal.Header closeButton>
           <Modal.Title>Confirm Delete</Modal.Title>
         </Modal.Header>
@@ -312,7 +357,10 @@ const BookList = () => {
           Are you sure you want to delete the book: {bookToDelete?.title}?
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowDeleteConfirmation(false)}>
+          <Button
+            variant="secondary"
+            onClick={() => setShowDeleteConfirmation(false)}
+          >
             CANCEL
           </Button>
           <Button
@@ -320,7 +368,9 @@ const BookList = () => {
             onClick={async () => {
               if (bookToDelete) {
                 await deleteBook(bookToDelete.id);
-                const updatedBooks = books.filter(book => book.id !== bookToDelete.id);
+                const updatedBooks = books.filter(
+                  (book) => book.id !== bookToDelete.id
+                );
                 setBooks(updatedBooks);
                 setBookToDelete(null);
                 setShowDeleteConfirmation(false);

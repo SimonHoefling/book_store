@@ -1,16 +1,19 @@
 // src/App.tsx
-import './App.css';
-import BookList from './components/BookList';
-import NavbarTop from './components/NavbarTop';
+import { useState } from "react";
+import "./App.css";
+import BookList from "./components/BookList";
+import NavbarTop from "./components/NavbarTop";
 
 function App() {
+  const [searchQuery, setSearchQuery] = useState<string>("");
+
   return (
     <div className="App">
-      <NavbarTop />
+      <NavbarTop onSearch={setSearchQuery} />
       <div className="text-center text-secondary mb-5">
         <h1>BOOK STORE ADMIN PANEL</h1>
       </div>
-      <BookList />
+      <BookList searchQuery={searchQuery} />
       {/* Add other components for CRUD operations */}
     </div>
   );
