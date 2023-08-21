@@ -158,6 +158,10 @@ const BookList = ({ searchQuery }: BookListProps) => {
 
   return (
     <Container>
+      {/* Heading */}
+      <div className="text-center text-secondary mb-4">
+        <h1>BOOK STORE ADMIN PANEL</h1>
+      </div>
       {/* Add a new book */}
       <h4
         className="mb-4 add-book-custom"
