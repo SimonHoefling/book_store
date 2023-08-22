@@ -28,4 +28,5 @@
 .trash-icon:hover {
   color: #dc3545;
   cursor: pointer;
+  transition: 0.3s ease-in-out;
 }

@@ -238,9 +238,9 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
               </div>
 
               <Card.Body className="d-flex flex-column">
-                <Card.Title>{book.title}</Card.Title>
-                <Card.Text>{book.author_name}</Card.Text>
-                <Card.Text>Year: {book.first_publish_year}</Card.Text>
+                <Card.Title className="mb-0">{book.title}</Card.Title>
+                <Card.Text className="mb-0">By {book.author_name}</Card.Text>
+                <Card.Text className="mb-0">Year: {book.first_publish_year}</Card.Text>
                 <Card.Text>Pages: {book.number_of_pages_median}</Card.Text>
                 <div className="mt-auto d-flex justify-content-between align-items-center">
                   <Button

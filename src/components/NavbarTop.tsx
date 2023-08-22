@@ -1,24 +1,23 @@
 // src/components/NavbarTop.tsx
-import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import { Navbar, Dropdown } from "react-bootstrap";
 import "./NavbarTop.css";
 interface NavbarTopProps {
   onSearch: (query: string) => void;
-  setSortOption: (option: string) => void; // Add this prop
+  setSortOption: (option: string) => void;
 }
 
 export default function NavbarTop({
   onSearch,
-  setSortOption, // Add this prop
+  setSortOption,
 }: NavbarTopProps) {
   const handleSortOptionClick = (option: string) => {
     console.log("Sorting option clicked:", option);
     setSortOption(option);
   };
   return (
-    <Navbar expand="sm" className="navbar-box-shadow mb-5">
+    <Navbar expand="md" className="navbar-box-shadow mb-5">
       <Container fluid className="px-5">
         <Navbar.Brand href="#" className="custom-navbar-brand">
           BOOK STORE
@@ -34,14 +33,13 @@ export default function NavbarTop({
             <Form.Control
               type="search"
               placeholder="Search book"
-              className="custom-search-field me-2 rounded-pill my-2"
+              className="custom-search-field me-2 rounded-pill my-2 w-100 w-lg-100"
               aria-label="Search"
               onChange={(e) => {
                 console.log(e.target.value);
                 onSearch(e.target.value);
               }}
             />
-            <Button variant="outline-secondary rounded-pill">Search</Button>
           </Form>
 
           <Dropdown className="d-flex align-items-center ms-3 justify-content-sm-start justify-content-center">
