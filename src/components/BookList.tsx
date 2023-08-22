@@ -13,6 +13,7 @@ import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBook } from "@fortawesome/free-solid-svg-icons";
+import defaultCover from "../assets/default-cover.jpeg";
 import "./BookList.css";
 
 interface Book {
@@ -222,8 +223,20 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
                       height: "100%",
                     }}
                   />
-                ) : null}
+                ) : (
+                  <Card.Img
+                    variant="top"
+                    src={defaultCover}
+                    alt="Default Cover"
+                    style={{
+                      position: "absolute",
+                      width: "100%",
+                      height: "100%",
+                    }}
+                  />
+                )}
               </div>
+
               <Card.Body className="d-flex flex-column">
                 <Card.Title>{book.title}</Card.Title>
                 <Card.Text>{book.author_name}</Card.Text>
