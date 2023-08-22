@@ -1,14 +1,14 @@
 /* src/components/BookList.css */
 .card-button-wrapper {
   position: absolute;
-  bottom: 10px; /* Adjust the vertical position as needed */
-  left: 10px; /* Adjust the horizontal position as needed */
+  bottom: 10px;
+  left: 10px;
   display: flex;
   gap: 5px;
 }
 
 .card-button {
-  width: 50px; /* Adjust the width as needed */
+  width: 50px;
 }
 
 .add-book-custom {
@@ -17,4 +17,15 @@
 .add-book-custom:hover {
   cursor: pointer;
   color: #000000;
+}
+
+.trash-icon {
+  color: #6c757d;
+  cursor: pointer;
+  font-size: 30px;
+  vertical-align: middle;
+}
+.trash-icon:hover {
+  color: #dc3545;
+  cursor: pointer;
 }

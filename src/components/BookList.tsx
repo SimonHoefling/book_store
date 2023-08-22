@@ -12,7 +12,7 @@ import Container from "react-bootstrap/Container";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBook } from "@fortawesome/free-solid-svg-icons";
+import { faBook, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import defaultCover from "../assets/default-cover.jpeg";
 import "./BookList.css";
 
@@ -242,7 +242,7 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
                 <Card.Text>{book.author_name}</Card.Text>
                 <Card.Text>Year: {book.first_publish_year}</Card.Text>
                 <Card.Text>Pages: {book.number_of_pages_median}</Card.Text>
-                <div className="mt-auto d-flex justify-content-between">
+                <div className="mt-auto d-flex justify-content-between align-items-center">
                   <Button
                     variant="secondary"
                     size="sm"
@@ -250,16 +250,15 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
                   >
                     EDIT
                   </Button>
-                  <Button
-                    variant="danger"
-                    size="sm"
-                    onClick={() => {
-                      setBookToDelete(book);
-                      setShowDeleteConfirmation(true);
-                    }}
-                  >
-                    DELETE
-                  </Button>
+                  <div className="trash-icon" style={{ marginLeft: "8px" }}>
+                    <FontAwesomeIcon
+                      icon={faTrashCan}
+                      onClick={() => {
+                        setBookToDelete(book);
+                        setShowDeleteConfirmation(true);
+                      }}
+                    />
+                  </div>
                 </div>
               </Card.Body>
             </Card>
