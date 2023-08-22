@@ -32,10 +32,11 @@ interface Book {
 
 interface BookListProps {
   searchQuery: string;
+  sortOption: string;
 }
 
 // State variables
-const BookList = ({ searchQuery }: BookListProps) => {
+const BookList = ({ searchQuery, sortOption }: BookListProps) => {
   const [books, setBooks] = useState<Book[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
@@ -60,11 +61,31 @@ const BookList = ({ searchQuery }: BookListProps) => {
   useEffect(() => {
     const loadBooks = async () => {
       const response = await fetchBooks();
-      setBooks(response.data);
+
+      // Apply sorting based on sortOption
+      const sortedBooks = response.data.sort((a: Book, b: Book) => {
+        switch (sortOption) {
+          case "A-Z":
+            return a.title.localeCompare(b.title);
+          case "Z-A":
+            return b.title.localeCompare(a.title);
+          case "Newest":
+            return b.first_publish_year - a.first_publish_year;
+          case "Oldest":
+            return a.first_publish_year - b.first_publish_year;
+          case "Most Pages":
+            return b.number_of_pages_median - a.number_of_pages_median;
+          default:
+            return 0;
+        }
+      });
+
+      // Set the sorted books in the state
+      setBooks(sortedBooks);
     };
 
     loadBooks();
-  }, []);
+  }, [sortOption]);
 
   // Function to handle editing a book
   const handleEdit = (book: Book) => {

@@ -4,12 +4,19 @@ import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import { Navbar, Dropdown } from "react-bootstrap";
 import "./NavbarTop.css";
-
 interface NavbarTopProps {
   onSearch: (query: string) => void;
+  setSortOption: (option: string) => void; // Add this prop
 }
 
-export default function NavbarTop({ onSearch }: NavbarTopProps) {
+export default function NavbarTop({
+  onSearch,
+  setSortOption, // Add this prop
+}: NavbarTopProps) {
+  const handleSortOptionClick = (option: string) => {
+    console.log("Sorting option clicked:", option);
+    setSortOption(option);
+  };
   return (
     <Navbar expand="sm" className="navbar-box-shadow mb-5">
       <Container fluid className="px-5">
@@ -43,11 +50,23 @@ export default function NavbarTop({ onSearch }: NavbarTopProps) {
             </Dropdown.Toggle>
 
             <Dropdown.Menu className="dropdown-menu-end">
-              <Dropdown.Item href="#/action-1">A - Z</Dropdown.Item>
-              <Dropdown.Item href="#/action-2">Z - A</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">Newest</Dropdown.Item>
-              <Dropdown.Item href="#/action-4">Oldest</Dropdown.Item>
-              <Dropdown.Item href="#/action-5">Most Pages</Dropdown.Item>
+              <Dropdown.Item onClick={() => handleSortOptionClick("A-Z")}>
+                A - Z
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => handleSortOptionClick("Z-A")}>
+                Z - A
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => handleSortOptionClick("Newest")}>
+                Newest
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => handleSortOptionClick("Oldest")}>
+                Oldest
+              </Dropdown.Item>
+              <Dropdown.Item
+                onClick={() => handleSortOptionClick("Most Pages")}
+              >
+                Most Pages
+              </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </Navbar.Collapse>

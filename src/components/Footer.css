@@ -1,4 +1,11 @@
 /* src/components/Footer.css */
 .custom-footer {
-  background-image: linear-gradient(to top, #6c757d, #90959c, #b5b7bc, #dadadd, #ffffff);
+  background-image: linear-gradient(
+    to top,
+    #6c757d,
+    #90959c,
+    #b5b7bc,
+    #dadadd,
+    #ffffff
+  );
 }
