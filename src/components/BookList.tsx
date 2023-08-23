@@ -111,15 +111,20 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
     setShowModal(false);
   };
 
+  // Utility function for getting the cover URLs from the ISBN number (needed when adding or editing a book)
+  const getCoverUrls = (isbn: string) => {
+    return {
+      S: `https://covers.openlibrary.org/b/isbn/${isbn}-S.jpg`,
+      M: `https://covers.openlibrary.org/b/isbn/${isbn}-M.jpg`,
+      L: `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`,
+    };
+  };
+
   const handleSaveChanges = async () => {
     if (selectedBook) {
       let updatedCovers = selectedBook.covers;
       if (selectedBook.isbn !== bookIsbn && bookIsbn) {
-        updatedCovers = {
-          S: `https://covers.openlibrary.org/b/isbn/${bookIsbn}-S.jpg`,
-          M: `https://covers.openlibrary.org/b/isbn/${bookIsbn}-M.jpg`,
-          L: `https://covers.openlibrary.org/b/isbn/${bookIsbn}-L.jpg`,
-        };
+        updatedCovers = getCoverUrls(bookIsbn);
       }
       const updatedBook: Book = {
         ...selectedBook,
@@ -142,13 +147,7 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
   const handleAddBook = async () => {
     const bookToAdd = {
       ...newBook,
-      covers: newBook.isbn
-        ? {
-            S: `https://covers.openlibrary.org/b/isbn/${newBook.isbn}-M.jpg`,
-            M: `https://covers.openlibrary.org/b/isbn/${newBook.isbn}-M.jpg`,
-            L: `https://covers.openlibrary.org/b/isbn/${newBook.isbn}-L.jpg`,
-          }
-        : {},
+      covers: newBook.isbn ? getCoverUrls(newBook.isbn) : {},
       isNew: true,
     };
     const response = await createBook(bookToAdd);
