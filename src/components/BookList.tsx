@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBook, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { Pagination } from "../components/Pagination"; // Use curly braces for named export
 import { isMobile } from "react-device-detect"; // Import the isMobile function
+import DeleteConfirmationModal from "./DeleteConfirmationModal";
 import defaultCover from "../assets/default-cover.jpeg";
 import "./BookList.css";
 
@@ -371,41 +372,18 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
         </Modal.Footer>
       </Modal>
       {/* Delete Confirmation Modal */}
-      <Modal
+      <DeleteConfirmationModal
         show={showDeleteConfirmation}
         onHide={() => setShowDeleteConfirmation(false)}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Confirm Delete</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          Are you sure you want to delete the book: {bookToDelete?.title}?
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="secondary"
-            onClick={() => setShowDeleteConfirmation(false)}
-          >
-            CANCEL
-          </Button>
-          <Button
-            variant="danger"
-            onClick={async () => {
-              if (bookToDelete) {
-                await deleteBook(bookToDelete.id);
-                const updatedBooks = books.filter(
-                  (book) => book.id !== bookToDelete.id
-                );
-                setBooks(updatedBooks);
-                setBookToDelete(null);
-                setShowDeleteConfirmation(false);
-              }
-            }}
-          >
-            DELETE
-          </Button>
-        </Modal.Footer>
-      </Modal>
+        bookToDelete={bookToDelete}
+        onDelete={async (bookId: string) => {
+          await deleteBook(bookId);
+          const updatedBooks = books.filter((book) => book.id !== bookId);
+          setBooks(updatedBooks);
+          setBookToDelete(null);
+          setShowDeleteConfirmation(false);
+        }}
+      />
     </Container>
   );
 };
