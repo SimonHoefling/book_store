@@ -1,5 +1,5 @@
 // src/components/BookList.tsx
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   fetchBooks,
   updateBook,
@@ -13,6 +13,8 @@ import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBook, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { Pagination } from "../components/Pagination"; // Use curly braces for named export
+import { isMobile } from "react-device-detect"; // Import the isMobile function
 import defaultCover from "../assets/default-cover.jpeg";
 import "./BookList.css";
 
@@ -36,7 +38,6 @@ interface BookListProps {
   sortOption: string;
 }
 
-// State variables
 const BookList = ({ searchQuery, sortOption }: BookListProps) => {
   const [books, setBooks] = useState<Book[]>([]);
   const [showModal, setShowModal] = useState(false);
@@ -48,6 +49,8 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
     useState<number>(0);
   const [selectedNumberOfPages, setSelectedNumberOfPages] = useState<number>(0);
   const [bookToDelete, setBookToDelete] = useState<Book | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const booksPerPage = isMobile ? 4 : 16; // Adjust this value as needed
   const [isEditing, setIsEditing] = useState(false);
   const [bookIsbn, setBookIsbn] = useState("");
   const [newBook, setNewBook] = useState({
@@ -58,12 +61,9 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
     isbn: "",
   });
 
-  // Load books from API on sorted by title
   useEffect(() => {
     const loadBooks = async () => {
       const response = await fetchBooks();
-
-      // Apply sorting based on sortOption
       const sortedBooks = response.data.sort((a: Book, b: Book) => {
         switch (sortOption) {
           case "A-Z":
@@ -80,15 +80,11 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
             return 0;
         }
       });
-
-      // Set the sorted books in the state
       setBooks(sortedBooks);
     };
-
     loadBooks();
   }, [sortOption]);
 
-  // Function to handle editing a book
   const handleEdit = (book: Book) => {
     setIsEditing(true);
     setSelectedBook(book);
@@ -99,36 +95,31 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
     if (book.isNew) {
       setBookIsbn(book.isbn);
     } else {
-      setBookIsbn(""); // Reset the ISBN input field for existing books
+      setBookIsbn("");
     }
     setShowModal(true);
   };
 
-  // Filter books based on search query
   const filteredBooks = books.filter((book) =>
     book.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Function to close the editing modal
   const handleCloseModal = () => {
     setIsEditing(false);
     setSelectedBook(null);
     setShowModal(false);
   };
 
-  // Function to save changes made in the modal
   const handleSaveChanges = async () => {
     if (selectedBook) {
-      let updatedCovers = selectedBook.covers; // Start with existing covers
+      let updatedCovers = selectedBook.covers;
       if (selectedBook.isbn !== bookIsbn && bookIsbn) {
-        // ISBN has changed and is not empty. Fetch new covers.
         updatedCovers = {
           S: `https://covers.openlibrary.org/b/isbn/${bookIsbn}-S.jpg`,
           M: `https://covers.openlibrary.org/b/isbn/${bookIsbn}-M.jpg`,
           L: `https://covers.openlibrary.org/b/isbn/${bookIsbn}-L.jpg`,
         };
       }
-
       const updatedBook: Book = {
         ...selectedBook,
         title: editedTitle,
@@ -136,26 +127,18 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
         first_publish_year: selectedFirstPublishYear,
         number_of_pages_median: selectedNumberOfPages,
         covers: updatedCovers,
-        isbn: bookIsbn, // Store the updated ISBN
+        isbn: bookIsbn,
       };
-
-      // Replace with your API call to update the book
       await updateBook(selectedBook.id, updatedBook);
-
-      // Update the books list with the updated book
       const updatedBooks = books.map((book) =>
         book.id === selectedBook.id ? updatedBook : book
       );
       setBooks(updatedBooks);
-
-      // Close the modal
       handleCloseModal();
     }
   };
 
-  // Function to add a new book
   const handleAddBook = async () => {
-    // Modify the newBook object before creating the book
     const bookToAdd = {
       ...newBook,
       covers: newBook.isbn
@@ -164,17 +147,11 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
             M: `https://covers.openlibrary.org/b/isbn/${newBook.isbn}-M.jpg`,
             L: `https://covers.openlibrary.org/b/isbn/${newBook.isbn}-L.jpg`,
           }
-        : {}, // Empty object if no ISBN
+        : {},
       isNew: true,
     };
-
-    // Replace with your API call to create a new book
     const response = await createBook(bookToAdd);
-
-    // Update the books list with the new book
     setBooks([...books, response.data]);
-
-    // Close the modal
     handleCloseModal();
   };
 
@@ -202,68 +179,72 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
       </h4>
       {/* Display the list of books */}
       <div className="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 mb-5">
-        {filteredBooks.map((book) => (
-          <div key={book.id} className="col mb-4">
-            <Card className="h-100 shadow">
-              <div
-                style={{
-                  position: "relative",
-                  paddingBottom: "100%",
-                  overflow: "hidden",
-                }}
-              >
-                {book.covers && book.covers.M ? (
-                  <Card.Img
-                    variant="top"
-                    src={book.covers.M}
-                    alt={book.title}
-                    style={{
-                      position: "absolute",
-                      width: "100%",
-                      height: "100%",
-                    }}
-                  />
-                ) : (
-                  <Card.Img
-                    variant="top"
-                    src={defaultCover}
-                    alt="Default Cover"
-                    style={{
-                      position: "absolute",
-                      width: "100%",
-                      height: "100%",
-                    }}
-                  />
-                )}
-              </div>
-
-              <Card.Body className="d-flex flex-column">
-                <Card.Title className="mb-0">{book.title}</Card.Title>
-                <Card.Text className="mb-0">By {book.author_name}</Card.Text>
-                <Card.Text className="mb-0">Year: {book.first_publish_year}</Card.Text>
-                <Card.Text>Pages: {book.number_of_pages_median}</Card.Text>
-                <div className="mt-auto d-flex justify-content-between align-items-center">
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    onClick={() => handleEdit(book)}
-                  >
-                    EDIT
-                  </Button>
-                  <div className="trash-icon" style={{ marginLeft: "8px" }}>
-                    <FontAwesomeIcon
-                      icon={faTrashCan}
-                      onClick={() => {
-                        setBookToDelete(book);
-                        setShowDeleteConfirmation(true);
+        {filteredBooks
+          .slice((currentPage - 1) * booksPerPage, currentPage * booksPerPage)
+          .map((book) => (
+            <div key={book.id} className="col mb-4">
+              <Card className="h-100 shadow">
+                <div
+                  style={{
+                    position: "relative",
+                    paddingBottom: "100%",
+                    overflow: "hidden",
+                  }}
+                >
+                  {book.covers && book.covers.M ? (
+                    <Card.Img
+                      variant="top"
+                      src={book.covers.M}
+                      alt={book.title}
+                      style={{
+                        position: "absolute",
+                        width: "100%",
+                        height: "100%",
                       }}
                     />
-                  </div>
+                  ) : (
+                    <Card.Img
+                      variant="top"
+                      src={defaultCover}
+                      alt="Default Cover"
+                      style={{
+                        position: "absolute",
+                        width: "100%",
+                        height: "100%",
+                      }}
+                    />
+                  )}
                 </div>
-              </Card.Body>
-            </Card>
-          </div>
-        ))}
+
+                <Card.Body className="d-flex flex-column">
+                  <Card.Title className="mb-0">{book.title}</Card.Title>
+                  <Card.Text className="mb-0">By {book.author_name}</Card.Text>
+                  <Card.Text className="mb-0">
+                    Year: {book.first_publish_year}
+                  </Card.Text>
+                  <Card.Text>Pages: {book.number_of_pages_median}</Card.Text>
+                  <div className="mt-auto d-flex justify-content-between align-items-center">
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      onClick={() => handleEdit(book)}
+                    >
+                      EDIT
+                    </Button>
+                    <div className="trash-icon" style={{ marginLeft: "8px" }}>
+                      <FontAwesomeIcon
+                        icon={faTrashCan}
+                        onClick={() => {
+                          setBookToDelete(book);
+                          setShowDeleteConfirmation(true);
+                        }}
+                      />
+                    </div>
+                  </div>
+                </Card.Body>
+              </Card>
+            </div>
+          ))}
         {/* Display message if no books match the search */}
         {filteredBooks.length === 0 && (
           <div
@@ -280,6 +261,13 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
           </div>
         )}
       </div>
+      {/* Pagination */}
+      <Pagination
+        totalItems={filteredBooks.length}
+        itemsPerPage={booksPerPage}
+        currentPage={currentPage}
+        onPageChange={setCurrentPage}
+      />
       {/* Modal for editing or adding a book */}
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>

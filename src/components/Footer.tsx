@@ -6,7 +6,7 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <Container fluid className="custom-footer py-5">
+    <Container fluid className="custom-footer py-5 mt-5">
       <Row className="justify-content-center">
         <Col xs="auto">&copy; {currentYear} BOOK STORE</Col>
       </Row>
