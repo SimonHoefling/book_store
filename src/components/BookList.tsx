@@ -84,7 +84,8 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
       setBooks(sortedBooks);
     };
     loadBooks();
-  }, [sortOption]);
+    setCurrentPage(1); // Reset to the first page when searchQuery changes
+  }, [sortOption, searchQuery]);
 
   const handleEdit = (book: Book) => {
     setIsEditing(true);
@@ -316,9 +317,9 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
                   selectedBook
                     ? setSelectedFirstPublishYear(parseInt(e.target.value))
                     : setNewBook({
-                        ...newBook,
-                        first_publish_year: parseInt(e.target.value),
-                      })
+                      ...newBook,
+                      first_publish_year: parseInt(e.target.value),
+                    })
                 }
               />
             </Form.Group>
@@ -336,9 +337,9 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
                   selectedBook
                     ? setSelectedNumberOfPages(parseInt(e.target.value))
                     : setNewBook({
-                        ...newBook,
-                        number_of_pages_median: parseInt(e.target.value),
-                      })
+                      ...newBook,
+                      number_of_pages_median: parseInt(e.target.value),
+                    })
                 }
               />
             </Form.Group>
