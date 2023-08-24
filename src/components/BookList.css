@@ -1,21 +1,28 @@
 /* src/components/BookList.css */
-.card-button-wrapper {
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  display: flex;
-  gap: 5px;
-}
-
-.card-button {
-  width: 50px;
-}
-
 .add-book-custom {
   color: #6c757d;
+  width: 200px;
 }
 .add-book-custom:hover {
   cursor: pointer;
+  color: #000000;
+}
+
+.card {
+  transition: transform 0.2s;
+  border-radius: 10px;
+}
+.card:hover {
+  transform: scale(1.03);
+}
+
+.card img {
+  border-radius: 10px 10px 0 0;
+}
+
+.custom-card-title {
+  font-size: 1.2rem;
+  font-weight: 500;
   color: #000000;
 }
 
@@ -26,7 +33,12 @@
   vertical-align: middle;
 }
 .trash-icon:hover {
+  cursor: pointer;
   color: #dc3545;
   cursor: pointer;
   transition: 0.3s ease-in-out;
+}
+
+.card-button {
+  width: 50px;
 }

@@ -218,7 +218,7 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
                 </div>
 
                 <Card.Body className="d-flex flex-column">
-                  <Card.Title className="mb-0">{book.title}</Card.Title>
+                  <Card.Title className="mb-0 custom-card-title">{book.title}</Card.Title>
                   <Card.Text className="mb-0">By {book.author_name}</Card.Text>
                   <Card.Text className="mb-0">
                     Year: {book.first_publish_year}
