@@ -291,8 +291,9 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
           {/* Form for editing or adding book details */}
           <Form>
             <Form.Group controlId="formTitle">
-              <Form.Label>Title</Form.Label>
+              <Form.Label className="mb-0 mt-2">Title</Form.Label>
               <Form.Control
+                className="custom-form-control"
                 type="text"
                 placeholder="Enter title"
                 value={selectedBook ? editedTitle : newBook.title}
@@ -304,8 +305,9 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
               />
             </Form.Group>
             <Form.Group controlId="formAuthor">
-              <Form.Label>Author</Form.Label>
+              <Form.Label className="mb-0 mt-2">Author</Form.Label>
               <Form.Control
+                className="custom-form-control"
                 type="text"
                 placeholder="Enter author"
                 value={selectedBook ? editedAuthor : newBook.author_name}
@@ -317,8 +319,9 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
               />
             </Form.Group>
             <Form.Group controlId="formFirstPublishYear">
-              <Form.Label>First Published Year</Form.Label>
+              <Form.Label className="mb-0 mt-2">First Published Year</Form.Label>
               <Form.Control
+                className="custom-form-control"
                 type="number"
                 placeholder="Enter first published year"
                 value={
@@ -337,8 +340,9 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
               />
             </Form.Group>
             <Form.Group controlId="formNumPagesMedian">
-              <Form.Label>Number of Pages Median</Form.Label>
+              <Form.Label className="mb-0  mt-2">Number of Pages Median</Form.Label>
               <Form.Control
+                className="custom-form-control"
                 type="number"
                 placeholder="Enter number of pages median"
                 value={
@@ -358,8 +362,9 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
             </Form.Group>
             {/* Add a field for ISBN number */}
             <Form.Group controlId="formIsbn">
-              <Form.Label>ISBN</Form.Label>
+              <Form.Label className="mb-0 mt-2">Add ISBN number get a book cover</Form.Label>
               <Form.Control
+                className="custom-form-control"
                 type="text"
                 placeholder="Enter ISBN"
                 value={isEditing ? bookIsbn : newBook.isbn}

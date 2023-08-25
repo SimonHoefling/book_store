@@ -1,17 +1,31 @@
 /* src/components/BookList.css */
+
+/* Bookstore headline styling */
+.custom-border-heading-1 {
+  border-bottom: 2px solid #6c757d;
+}
+
+.custom-border-heading-2 {
+  border-top: 2px solid #6c757d;
+}
+
+/* Style for add book button */
 .add-book-custom {
   color: #6c757d;
   width: 200px;
 }
+
 .add-book-custom:hover {
   cursor: pointer;
   color: #000000;
 }
 
+/* Style for the book card */
 .card {
   transition: transform 0.2s;
   border-radius: 10px;
 }
+
 .card:hover {
   transform: scale(1.03);
 }
@@ -32,6 +46,7 @@
   font-size: 30px;
   vertical-align: middle;
 }
+
 .trash-icon:hover {
   cursor: pointer;
   color: #dc3545;
@@ -39,17 +54,9 @@
   transition: 0.3s ease-in-out;
 }
 
-.card-button {
-  width: 50px;
-}
-
-.custom-border-heading-1 {
-  border-bottom: 2px solid #6c757d;
-  /* border-left: 2px solid #6c757d;
-  padding-left: 4px; */
-}
-.custom-border-heading-2 {
-  border-top: 2px solid #6c757d;
-  /* border-right: 2px solid #6c757d;
-  padding-right: 4px; */
+/* Styling of the form input fields for adding or editing a book */
+.custom-form-control:focus {
+  border: 1px solid #6c757d;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.25);
 }
