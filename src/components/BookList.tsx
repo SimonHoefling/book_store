@@ -19,6 +19,7 @@ import DeleteConfirmationModal from "./DeleteConfirmationModal";
 import defaultCover from "../assets/default-cover.jpeg";
 import "./BookList.css";
 
+// Interface for the Book object
 interface Book {
   id: string;
   title: string;
@@ -34,12 +35,15 @@ interface Book {
   isNew?: boolean;
 }
 
+// Props for the BookList component
 interface BookListProps {
   searchQuery: string;
   sortOption: string;
 }
 
+// Main component for displaying the list of books
 const BookList = ({ searchQuery, sortOption }: BookListProps) => {
+  // State variables
   const [books, setBooks] = useState<Book[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
@@ -62,6 +66,7 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
     isbn: "",
   });
 
+  // Fetch and sort books based on sort option and search query
   useEffect(() => {
     const loadBooks = async () => {
       const response = await fetchBooks();
@@ -87,6 +92,7 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
     setCurrentPage(1); // Reset to the first page when searchQuery changes
   }, [sortOption, searchQuery]);
 
+  // Handle the edit button click
   const handleEdit = (book: Book) => {
     setIsEditing(true);
     setSelectedBook(book);
@@ -102,10 +108,12 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
     setShowModal(true);
   };
 
+  // Filter books based on the search query
   const filteredBooks = books.filter((book) =>
     book.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // Close the modal
   const handleCloseModal = () => {
     setIsEditing(false);
     setSelectedBook(null);
@@ -121,6 +129,7 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
     };
   };
 
+  // Handle saving changes to a book
   const handleSaveChanges = async () => {
     if (selectedBook) {
       let updatedCovers = selectedBook.covers;
@@ -145,6 +154,7 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
     }
   };
 
+  // Handle adding a new book
   const handleAddBook = async () => {
     const bookToAdd = {
       ...newBook,
@@ -160,10 +170,13 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
     <Container>
       {/* Heading */}
       <div className="text-center text-secondary mb-4">
-        <h1>BOOK STORE ADMIN PANEL</h1>
+        <h2>
+          <span className="custom-border-heading-1">BOOK STORE</span>&nbsp;
+          <span className="custom-border-heading-2">ADMIN PANEL</span>
+        </h2>
       </div>
       {/* Add a new book */}
-      <h4
+      <h5
         className="mb-4 add-book-custom"
         onClick={() => {
           setNewBook({
@@ -177,7 +190,7 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
         }}
       >
         <FontAwesomeIcon icon={faBook} /> Add book
-      </h4>
+      </h5>
       {/* Display the list of books */}
       <div className="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 mb-5">
         {filteredBooks
