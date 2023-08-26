@@ -5,6 +5,7 @@ import Form from "react-bootstrap/Form";
 import { Navbar, Dropdown } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import logoImage from '../assets/BookStore.webp';
 import "./NavbarTop.css";
 
 interface NavbarTopProps {
@@ -27,7 +28,7 @@ export default function NavbarTop({
     <Navbar expand="md" className="navbar-box-shadow mb-5">
       <Container fluid className="px-5">
         <Navbar.Brand href="#" className="custom-navbar-brand">
-          BOOK STORE
+        <img src={logoImage} alt="Book Store Logo" height="30" />
         </Navbar.Brand>
 
         <Navbar.Toggle aria-controls="navbar-collapse" />
