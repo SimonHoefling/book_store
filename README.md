@@ -1,46 +1,58 @@
-# Getting Started with Create React App
+# Book Management Web App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This react application is a frontend platform built to interact with a provided backend API, enabling users to manage book records.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- List books with associated details, including cover images.
+- Apply client-side filtering according to user input.
+- Create, update, and delete book entries.
+- (Optional) Additional features at the developer's discretion.
 
-### `npm start`
+## Prerequisites
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+1. [Node.js](https://nodejs.org/)
+2. [Docker](https://www.docker.com/) (for those choosing the Docker setup method for the backend mock server)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
 
-### `npm test`
+## Setup and Installation
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 1. Backend/API Setup
 
-### `npm run build`
+**A. Download** the mock server JSON definition file [(JSON file)](https://s3.eu-central-1.amazonaws.com/careers.anevis.solutions/application.json). Save it in a folder and navigate with the terminal into this folder
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+**B. Using Docker**:
+```bash
+docker run -d --rm \
+ --mount type=bind,source=$PWD/application.json,target=/data,readonly -p 8080:8080 \
+ --name mockoon mockoon/cli:latest -d data -p 8080
+ ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+ After following the method above, the mock server will start running on localhost at port 8080
 
-### `npm run eject`
+ ## Frontend Setup
+**A. Clone** the repository:
+```bash
+git clone <your-repo-link>
+cd <repo-name>
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+**B. Install** the dependencies:
+```bash
+npm install
+````
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+**C. Run** the frontend application:
+```bash
+npm start
+```
+After executing the above command, the app should be accessible at http://localhost:3000 (or the designated port depending on your React framework).
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Using the Application
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+1. **Authentication:**
+Authenticate using the given credentials and retrieve a bearer token using the /login endpoint. This token should be used for subsequent API interactions.
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+2. **Functionality:**
+Use the application UI to fetch book details, filter listings, and perform CRUD operations on book records.
