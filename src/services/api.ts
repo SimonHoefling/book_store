@@ -13,8 +13,8 @@ const api = axios.create({
 // Authenticate and set Bearer token for future requests
 export const authenticate = async () => {
   const response = await api.post("/login", {
-    username: "admin",
-    password: "admin",
+    username: process.env.REACT_APP_API_USERNAME,
+    password: process.env.REACT_APP_API_PASSWORD,
   });
   api.defaults.headers["Authorization"] = `Bearer ${response.data}`;
   return response.data;
