@@ -34,8 +34,8 @@ docker run -d --rm \
  ## Frontend Setup
 **A. Clone** the repository:
 ```bash
-git clone <your-repo-link>
-cd <repo-name>
+git clone https://github.com/SimonHoefling/book_store
+cd book_store
 ```
 
 **B. Install** the dependencies:
