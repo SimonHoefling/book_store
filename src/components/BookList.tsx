@@ -359,21 +359,26 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
                 }
               />
             </Form.Group>
-            {/* Add a field for ISBN number */}
-            <Form.Group controlId="formIsbn">
-              <Form.Label className="mb-0 mt-2">Add ISBN number get a book cover</Form.Label>
-              <Form.Control
-                className="custom-form-control"
-                type="text"
-                placeholder="Enter ISBN"
-                value={isEditing ? bookIsbn : newBook.isbn}
-                onChange={(e) =>
-                  isEditing
-                    ? setBookIsbn(e.target.value) // Update the ISBN for the current book being edited
-                    : setNewBook({ ...newBook, isbn: e.target.value })
-                }
-              />
-            </Form.Group>
+            {/* Condition for rendering the ISBN input only for new books that are not from the API */}
+            {(!selectedBook || (selectedBook && selectedBook.isNew)) && (
+              <Form.Group controlId="formIsbn">
+                <Form.Label className="mb-0 mt-2">
+                  Add ISBN number to get a book cover
+                </Form.Label>
+                <Form.Control
+                  className="custom-form-control"
+                  type="text"
+                  placeholder="Enter ISBN"
+                  value={isEditing ? bookIsbn : newBook.isbn}
+                  onChange={(e) =>
+                    isEditing
+                      ? setBookIsbn(e.target.value)
+                      : setNewBook({ ...newBook, isbn: e.target.value })
+                  }
+                />
+              </Form.Group>
+            )}
+
           </Form>
         </Modal.Body>
         <Modal.Footer>
