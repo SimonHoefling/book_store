@@ -1,17 +1,5 @@
 /* NavbarTop.css */
 
-/* Style for the primary brand name on the navbar */
-.custom-navbar-brand {
-  font-weight: bold;
-  color: #6c757d;
-  letter-spacing: 2px;
-}
-
-/* Style for hover effect on the brand name */
-.custom-navbar-brand:hover {
-  color: #6c757d;
-}
-
 /* Focus style for the search input field */
 .custom-search-field:focus {
   border: 1px solid #6c757d;

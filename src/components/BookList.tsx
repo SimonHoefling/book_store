@@ -6,6 +6,7 @@ import {
   deleteBook,
   createBook,
 } from "../services/api";
+import { Pagination, DeleteConfirmationModal } from "../components";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
@@ -13,9 +14,7 @@ import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBook, faTrashCan } from "@fortawesome/free-solid-svg-icons";
-import { Pagination } from "../components/Pagination"; // Use curly braces for named export
-import { isMobile } from "react-device-detect"; // Import the isMobile function
-import DeleteConfirmationModal from "./DeleteConfirmationModal";
+import { isMobile } from "react-device-detect";
 import defaultCover from "../assets/default-cover.jpeg";
 import "./BookList.css";
 

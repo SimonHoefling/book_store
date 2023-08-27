@@ -1,5 +1,5 @@
 // src/components/NavbarTop.tsx
-import React, { useState } from 'react';  // <-- ADDED: for managing state
+import React, { useState } from 'react';
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import { Navbar, Dropdown } from "react-bootstrap";
@@ -27,8 +27,8 @@ export default function NavbarTop({
   return (
     <Navbar expand="md" className="navbar-box-shadow mb-5">
       <Container fluid className="px-5">
-        <Navbar.Brand href="#" className="custom-navbar-brand">
-        <img src={logoImage} alt="Book Store Logo" height="30" />
+        <Navbar.Brand href="#">
+          <img src={logoImage} alt="Book Store Logo" height="30" />
         </Navbar.Brand>
 
         <Navbar.Toggle aria-controls="navbar-collapse" />
@@ -41,10 +41,10 @@ export default function NavbarTop({
                 placeholder="Search book"
                 className="custom-search-field me-2 rounded-pill my-2 w-100 w-lg-100"
                 aria-label="Search"
-                value={searchValue}  // <-- ADDED: bind the value of the input to our state
+                value={searchValue}
                 onChange={(e) => {
                   const val = e.target.value;
-                  setSearchValue(val);  // <-- ADDED: update our state with input value
+                  setSearchValue(val);
                   console.log(val);
                   onSearch(val);
                 }}
