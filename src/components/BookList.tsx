@@ -120,11 +120,12 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
   };
 
   // Utility function for getting the cover URLs from the ISBN number (needed when adding or editing a book)
+  // ?default=false is added to throw a 404 error if the cover is not found
   const getCoverUrls = (isbn: string) => {
     return {
-      S: `https://covers.openlibrary.org/b/isbn/${isbn}-S.jpg`,
-      M: `https://covers.openlibrary.org/b/isbn/${isbn}-M.jpg`,
-      L: `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`,
+      S: `https://covers.openlibrary.org/b/isbn/${isbn}-S.jpg?default=false`,
+      M: `https://covers.openlibrary.org/b/isbn/${isbn}-M.jpg?default=false`,
+      L: `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg?default=false`,
     };
   };
 
@@ -204,29 +205,20 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
                     overflow: "hidden",
                   }}
                 >
-                  {book.covers && book.covers.M ? (
-                    <Card.Img
-                      variant="top"
-                      src={book.covers.M}
-                      alt={book.title}
-                      style={{
-                        position: "absolute",
-                        width: "100%",
-                        height: "100%",
-                      }}
-                    />
-                  ) : (
-                    <Card.Img
-                      variant="top"
-                      src={defaultCover}
-                      alt="Default Cover"
-                      style={{
-                        position: "absolute",
-                        width: "100%",
-                        height: "100%",
-                      }}
-                    />
-                  )}
+                  <img
+                    alt={book.title}
+                    style={{
+                      position: "absolute",
+                      width: "100%",
+                      height: "100%",
+                    }}
+                    src={book.covers && book.covers.M ? book.covers.M : ""}
+                    onError={(e) => {
+                      if (e.target instanceof HTMLImageElement) {
+                        e.target.src = defaultCover; // if the cover api throws a 404 error (cover not found) the default-cover.jpeg will be displayed
+                      }
+                    }}
+                  />
                 </div>
 
                 <Card.Body className="d-flex flex-column">
@@ -258,6 +250,7 @@ const BookList = ({ searchQuery, sortOption }: BookListProps) => {
               </Card>
             </div>
           ))}
+
         {/* Display message if no books match the search */}
         {filteredBooks.length === 0 && (
           <div
